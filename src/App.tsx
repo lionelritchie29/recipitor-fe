@@ -8,7 +8,7 @@ const App: Component = () => {
     <main>
       <Navbar />
 
-      <div class='max-w-screen-xl mx-auto py-4'>
+      <div class='max-w-screen-xl mx-auto p-4'>
         <Routes>
           <Route path='/' component={Home} />
         </Routes>
