@@ -5,11 +5,9 @@ import { createDraggable } from '@thisbeyond/solid-dnd';
 const ItemCard: Component<{ item: Item }> = (props) => {
   const draggable = createDraggable(props.item.ID);
   return (
-    <div
-      use:draggable
-      class='rounded-lg cursor-pointer shadow hover:shadow-lg transition hover:scale-105'>
+    <div use:draggable class='rounded-lg cursor-pointer shadow hover:shadow-lg'>
       <div
-        class='rounded-lg border'
+        class='rounded-lg border bg-white'
         style={{
           'background-image': `url("${props.item.Image}")`,
           'background-position': 'center',
