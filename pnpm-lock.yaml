@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@solidjs/router': ^0.8.2
   autoprefixer: ^10.4.14
   postcss: ^8.4.23
   solid-js: ^1.6.10
@@ -10,6 +11,7 @@ specifiers:
   vite-plugin-solid: ^2.5.0
 
 dependencies:
+  '@solidjs/router': 0.8.2_solid-js@1.6.10
   solid-js: 1.6.10
 
 devDependencies:
@@ -593,6 +595,14 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@solidjs/router/0.8.2_solid-js@1.6.10:
+    resolution: {integrity: sha512-gUKW+LZqxtX6y/Aw6JKyy4gQ9E7dLqp513oB9pSYJR1HM5c56Pf7eijzyXX+b3WuXig18Cxqah4tMtF0YGu80w==}
+    peerDependencies:
+      solid-js: ^1.5.3
+    dependencies:
+      solid-js: 1.6.10
+    dev: false
 
   /ansi-styles/3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
