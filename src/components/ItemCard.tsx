@@ -1,15 +1,20 @@
 import { Component } from 'solid-js';
+import { Item } from '../models/Item';
+import { createDraggable } from '@thisbeyond/solid-dnd';
 
-const ItemCard: Component = () => {
+const ItemCard: Component<{ item: Item }> = (props) => {
+  const draggable = createDraggable(props.item.ID);
   return (
-    <div class='border rounded-lg cursor-pointer shadow hover:shadow-lg transition hover:scale-105'>
+    <div
+      use:draggable
+      class='rounded-lg cursor-pointer shadow hover:shadow-lg transition hover:scale-105'>
       <div
-        class='rounded-lg'
+        class='rounded-lg border'
         style={{
-          'background-image': `url("https://i.ibb.co/bRnWYMm/Chicken-Breast-Boneless-3-4-Pieces-Hero-Shot-1.jpg")`,
+          'background-image': `url("${props.item.Image}")`,
           'background-position': 'center',
           'background-repeat': 'no-repeat',
-          'background-size': 'cover',
+          'background-size': 'contain',
           width: '150px',
           height: '150px',
         }}
