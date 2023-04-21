@@ -3,12 +3,22 @@ import ItemCard from '../components/ItemCard';
 import Draggable from '../components/Draggable';
 import { Item } from '../models/Item';
 import { DragDropProvider, DragDropSensors, DragEvent, DragOverlay } from '@thisbeyond/solid-dnd';
+import BasketDropArea from '../components/BasketDropArea';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
 
   const onDragStart = ({ draggable }: DragEvent) => {
     setActiveDragItemId((draggable.id as number) || null);
+  };
+
+  const onDragEnd = ({ draggable, droppable }: DragEvent) => {
+    if (droppable) {
+      console.log('Droppable');
+      console.log({ draggable });
+    } else {
+      console.log('Not droppable');
+    }
   };
 
   const dummyItems: Item[] = [
@@ -42,43 +52,42 @@ const Home: Component = () => {
   ];
 
   return (
-    <DragDropProvider onDragStart={onDragStart}>
-      <DragDropSensors>
-        <section class='flex'>
-          <section class='w-2/3 border-r'>
-            <div class='mb-4'>
-              <h2 class='font-semibold'>Available Items</h2>
-              <p class='text-gray-500'>You can move these items to the basket beside.</p>
-            </div>
+    <DragDropProvider onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <DragDropSensors />
+      <section class='flex'>
+        <section class='w-2/3 border-r'>
+          <div class='mb-4'>
+            <h2 class='font-semibold'>Available Items</h2>
+            <p class='text-gray-500'>You can move these items to the basket beside.</p>
+          </div>
 
-            <ul class='grid grid-cols-5 gap-4 mr-4'>
-              <For each={dummyItems}>
-                {(item, i) => (
-                  <li>
-                    <Draggable id={item.ID}>
-                      <ItemCard item={item} />
-                    </Draggable>
-                  </li>
-                )}
-              </For>
-            </ul>
-          </section>
-          <section class='w-1/3 ml-4'>
-            <div class='mb-4'>
-              <h2 class='font-semibold'>Basket</h2>
-              <p class='text-gray-500'>Select an item from the left and drag it here.</p>
-            </div>
-
-            <div class='rounded-lg bg-gray-100 border-2 border-blue-300 border-dashed min-h-[30rem] w-full'></div>
-          </section>
+          <ul class='grid grid-cols-5 gap-4 mr-4'>
+            <For each={dummyItems}>
+              {(item, i) => (
+                <li>
+                  <Draggable id={item.ID}>
+                    <ItemCard item={item} />
+                  </Draggable>
+                </li>
+              )}
+            </For>
+          </ul>
         </section>
+        <section class='w-1/3 ml-4'>
+          <div class='mb-4'>
+            <h2 class='font-semibold'>Basket</h2>
+            <p class='text-gray-500'>Select an item from the left and drag it here.</p>
+          </div>
 
-        <DragOverlay>
-          <Show when={activeDragItemId() != null}>
-            <ItemCard item={dummyItems.find((d) => d.ID == activeDragItemId())!!} />
-          </Show>
-        </DragOverlay>
-      </DragDropSensors>
+          <BasketDropArea id={1}></BasketDropArea>
+        </section>
+      </section>
+
+      <DragOverlay>
+        <Show when={activeDragItemId() != null}>
+          <ItemCard item={dummyItems.find((d) => d.ID == activeDragItemId())!!} />
+        </Show>
+      </DragOverlay>
     </DragDropProvider>
   );
 };
