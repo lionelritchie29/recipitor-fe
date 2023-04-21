@@ -1,11 +1,9 @@
 import { Component } from 'solid-js';
 import { Item } from '../models/Item';
-import { createDraggable } from '@thisbeyond/solid-dnd';
 
 const ItemCard: Component<{ item: Item }> = (props) => {
-  const draggable = createDraggable(props.item.ID);
   return (
-    <div use:draggable class='rounded-lg cursor-pointer shadow hover:shadow-lg'>
+    <div class='rounded-lg cursor-pointer shadow hover:shadow-lg'>
       <div
         class='rounded-lg border bg-white'
         style={{
