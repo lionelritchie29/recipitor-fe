@@ -7,17 +7,22 @@ import BasketDropArea from '../components/BasketDropArea';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
+  const [basketItems, setBasketItems] = createSignal<Item[]>([]);
 
   const onDragStart = ({ draggable }: DragEvent) => {
     setActiveDragItemId((draggable.id as number) || null);
   };
 
   const onDragEnd = ({ draggable, droppable }: DragEvent) => {
-    if (droppable) {
-      console.log('Droppable');
-      console.log({ draggable });
-    } else {
-      console.log('Not droppable');
+    if (draggable && droppable) {
+      const isExist = basketItems().find((item) => item.ID == draggable.id);
+      if (!isExist) {
+        const item = dummyItems.find((i) => i.ID === draggable.id);
+
+        if (item) {
+          setBasketItems((items) => [...items, item]);
+        }
+      }
     }
   };
 
@@ -77,6 +82,22 @@ const Home: Component = () => {
           <div class='mb-4'>
             <h2 class='font-semibold'>Basket</h2>
             <p class='text-gray-500'>Select an item from the left and drag it here.</p>
+          </div>
+
+          <div class='mb-4 p-2 rounded-lg border shadow-sm'>
+            <Show when={!basketItems().length}>
+              <div class='text-xs text-gray-500'>No items added.</div>
+            </Show>
+
+            <ul class='grid grid-cols-6 gap-4'>
+              <For each={basketItems()}>
+                {(item) => (
+                  <li>
+                    <ItemCard height='50px' item={item}></ItemCard>
+                  </li>
+                )}
+              </For>
+            </ul>
           </div>
 
           <BasketDropArea id={1}></BasketDropArea>

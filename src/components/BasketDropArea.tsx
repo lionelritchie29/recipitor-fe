@@ -7,7 +7,9 @@ const BasketDropArea: Component<{ id: number }> = (props) => {
     <div
       use:droppable
       classList={{ 'bg-blue-100': droppable.isActiveDroppable }}
-      class='rounded-lg bg-gray-100 border-2 border-blue-300 border-dashed min-h-[30rem] w-full'></div>
+      class='rounded-lg text-gray-400 flex items-center justify-center bg-gray-100 border-2 border-blue-300 border-dashed min-h-[12rem] w-full'>
+      Drag item here
+    </div>
   );
 };
 
