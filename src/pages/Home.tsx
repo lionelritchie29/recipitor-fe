@@ -1,6 +1,6 @@
 import { Component, For, Show, createSignal } from 'solid-js';
 import ItemCard from '../components/ItemCard';
-import DraggableItemCard from '../components/DraggableItemCard';
+import Draggable from '../components/Draggable';
 import { Item } from '../models/Item';
 import { DragDropProvider, DragDropSensors, DragEvent, DragOverlay } from '@thisbeyond/solid-dnd';
 
@@ -55,7 +55,9 @@ const Home: Component = () => {
               <For each={dummyItems}>
                 {(item, i) => (
                   <li>
-                    <DraggableItemCard item={item} />
+                    <Draggable id={item.ID}>
+                      <ItemCard item={item} />
+                    </Draggable>
                   </li>
                 )}
               </For>
