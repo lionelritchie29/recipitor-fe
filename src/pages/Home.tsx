@@ -4,24 +4,64 @@ import Draggable from '../components/Draggable';
 import { Item } from '../models/Item';
 import { DragDropProvider, DragDropSensors, DragEvent, DragOverlay } from '@thisbeyond/solid-dnd';
 import BasketDropArea from '../components/BasketDropArea';
+import BasketItemCard from '../components/BasketItemCard';
+import { BasketItem } from '../models/BasketItem';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
-  const [basketItems, setBasketItems] = createSignal<Item[]>([]);
+  const [basketItems, setBasketItems] = createSignal<BasketItem[]>([]);
 
   const onDragStart = ({ draggable }: DragEvent) => {
     setActiveDragItemId((draggable.id as number) || null);
   };
 
+  const increaseQty = (id: number) => {
+    console.log('increase');
+    setBasketItems(
+      basketItems().map((item) => {
+        if (item.item.ID == id) {
+          return { ...item, quantity: item.quantity + 1 };
+        }
+        return item;
+      }),
+    );
+  };
+
+  const decreaseQty = (id: number) => {
+    console.log('decrease');
+    setBasketItems(
+      basketItems().map((item) => {
+        if (item.item.ID == id) {
+          return { ...item, quantity: Math.max(item.quantity - 1, 0) };
+        }
+        return item;
+      }),
+    );
+  };
+
   const onDragEnd = ({ draggable, droppable }: DragEvent) => {
     if (draggable && droppable) {
-      const isExist = basketItems().find((item) => item.ID == draggable.id);
-      if (!isExist) {
+      const itemExist = basketItems().find((basket) => basket.item.ID == draggable.id);
+      if (!itemExist) {
         const item = dummyItems.find((i) => i.ID === draggable.id);
 
         if (item) {
-          setBasketItems((items) => [...items, item]);
+          const newBasketItem: BasketItem = {
+            item,
+            quantity: 1,
+            amount: '',
+          };
+          setBasketItems((items) => [...items, newBasketItem]);
         }
+      } else {
+        setBasketItems(
+          basketItems().map((item) => {
+            if (item.item.ID == itemExist.item.ID) {
+              return { ...item, quantity: item.quantity + 1 };
+            }
+            return item;
+          }),
+        );
       }
     }
   };
@@ -84,23 +124,26 @@ const Home: Component = () => {
             <p class='text-gray-500'>Select an item from the left and drag it here.</p>
           </div>
 
-          <div class='mb-4 p-2 rounded-lg border shadow-sm'>
+          <BasketDropArea id={1}></BasketDropArea>
+
+          <div class='mt-4 p-2 rounded-lg border shadow-sm'>
             <Show when={!basketItems().length}>
               <div class='text-xs text-gray-500'>No items added.</div>
             </Show>
 
-            <ul class='grid grid-cols-6 gap-4'>
+            <ul class='grid grid-cols-1'>
               <For each={basketItems()}>
-                {(item) => (
+                {(basketItem) => (
                   <li>
-                    <ItemCard height='50px' item={item}></ItemCard>
+                    <BasketItemCard
+                      increaseQty={increaseQty}
+                      decreaseQty={decreaseQty}
+                      item={basketItem}></BasketItemCard>
                   </li>
                 )}
               </For>
             </ul>
           </div>
-
-          <BasketDropArea id={1}></BasketDropArea>
         </section>
       </section>
 
