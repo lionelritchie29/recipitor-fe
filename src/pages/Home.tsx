@@ -16,7 +16,6 @@ const Home: Component = () => {
   };
 
   const increaseQty = (id: number) => {
-    console.log('increase');
     setBasketItems(
       basketItems().map((item) => {
         if (item.item.ID == id) {
@@ -28,14 +27,15 @@ const Home: Component = () => {
   };
 
   const decreaseQty = (id: number) => {
-    console.log('decrease');
     setBasketItems(
-      basketItems().map((item) => {
-        if (item.item.ID == id) {
-          return { ...item, quantity: Math.max(item.quantity - 1, 0) };
-        }
-        return item;
-      }),
+      basketItems()
+        .map((item) => {
+          if (item.item.ID == id) {
+            return { ...item, quantity: Math.max(item.quantity - 1, 0) };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0),
     );
   };
 
