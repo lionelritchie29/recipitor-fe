@@ -1,15 +1,17 @@
-import { Component, For, Show, createSignal } from 'solid-js';
+import { Component, For, Show, createResource, createSignal } from 'solid-js';
 import ItemCard from '../components/ItemCard';
 import Draggable from '../components/Draggable';
-import { Item } from '../models/Item';
 import { DragDropProvider, DragDropSensors, DragEvent, DragOverlay } from '@thisbeyond/solid-dnd';
 import BasketDropArea from '../components/BasketDropArea';
 import BasketItemCard from '../components/BasketItemCard';
 import { BasketItem } from '../models/BasketItem';
+import { ItemService } from '../services/ItemService';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
   const [basketItems, setBasketItems] = createSignal<BasketItem[]>([]);
+  const itemService = new ItemService();
+  const [items] = createResource(itemService.getItems);
 
   const onDragStart = ({ draggable }: DragEvent) => {
     setActiveDragItemId((draggable.id as number) || null);
@@ -43,7 +45,7 @@ const Home: Component = () => {
     if (draggable && droppable) {
       const itemExist = basketItems().find((basket) => basket.item.ID == draggable.id);
       if (!itemExist) {
-        const item = dummyItems.find((i) => i.ID === draggable.id);
+        const item = (items() ?? []).find((i) => i.ID === draggable.id);
 
         if (item) {
           const newBasketItem: BasketItem = {
@@ -66,36 +68,6 @@ const Home: Component = () => {
     }
   };
 
-  const dummyItems: Item[] = [
-    {
-      ID: 1,
-      Name: 'Apple',
-      Description: 'Apple Fruit',
-      Image: 'https://i.ibb.co/bg7wK41/apple-158989157.jpg',
-      CreatedAt: new Date(),
-      UpdateAt: new Date(),
-      DeletedAt: null,
-    },
-    {
-      ID: 2,
-      Name: 'Chicken Breast',
-      Description: 'Breast of chicken',
-      Image: 'https://i.ibb.co/bRnWYMm/Chicken-Breast-Boneless-3-4-Pieces-Hero-Shot-1.jpg',
-      CreatedAt: new Date(),
-      UpdateAt: new Date(),
-      DeletedAt: null,
-    },
-    {
-      ID: 3,
-      Name: 'Banana',
-      Description: 'Banana fruit',
-      Image: 'https://i.ibb.co/mz8n7Lw/Banana-Single-1.jpg',
-      CreatedAt: new Date(),
-      UpdateAt: new Date(),
-      DeletedAt: null,
-    },
-  ];
-
   return (
     <DragDropProvider onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <DragDropSensors />
@@ -107,7 +79,7 @@ const Home: Component = () => {
           </div>
 
           <ul class='grid grid-cols-5 gap-4 mr-4'>
-            <For each={dummyItems}>
+            <For each={items() ?? []}>
               {(item, i) => (
                 <li>
                   <Draggable id={item.ID}>
@@ -149,7 +121,7 @@ const Home: Component = () => {
 
       <DragOverlay>
         <Show when={activeDragItemId() != null}>
-          <ItemCard item={dummyItems.find((d) => d.ID == activeDragItemId())!!} />
+          <ItemCard item={(items() ?? []).find((d) => d.ID == activeDragItemId())!!} />
         </Show>
       </DragOverlay>
     </DragDropProvider>
