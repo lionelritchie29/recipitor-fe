@@ -8,6 +8,7 @@ import { BasketItem } from '../models/BasketItem';
 import { ItemService } from '../services/ItemService';
 import toast from 'solid-toast';
 import Basket from '../components/Basket';
+import ItemList from '../components/ItemList';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
@@ -59,17 +60,7 @@ const Home: Component = () => {
             <p class='text-gray-500'>You can move these items to the basket beside.</p>
           </div>
 
-          <ul class='grid grid-cols-5 gap-4 mr-4'>
-            <For each={items() ?? []}>
-              {(item, i) => (
-                <li>
-                  <Draggable id={item.ID}>
-                    <ItemCard item={item} />
-                  </Draggable>
-                </li>
-              )}
-            </For>
-          </ul>
+          <ItemList items={items} />
         </section>
         <section class='w-1/3 ml-4'>
           <div class='mb-4'>
