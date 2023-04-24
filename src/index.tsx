@@ -4,6 +4,7 @@ import { Router } from '@solidjs/router';
 
 import './index.css';
 import App from './App';
+import { Toaster } from 'solid-toast';
 
 const root = document.getElementById('root');
 
@@ -16,7 +17,9 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(
   () => (
     <Router>
-      <App />
+      <App>
+        <Toaster />
+      </App>
     </Router>
   ),
   root!,

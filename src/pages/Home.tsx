@@ -6,6 +6,7 @@ import BasketDropArea from '../components/BasketDropArea';
 import BasketItemCard from '../components/BasketItemCard';
 import { BasketItem } from '../models/BasketItem';
 import { ItemService } from '../services/ItemService';
+import toast from 'solid-toast';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
@@ -37,7 +38,10 @@ const Home: Component = () => {
           }
           return item;
         })
-        .filter((item) => item.quantity > 0),
+        .filter((item) => {
+          if (item.quantity == 0) toast.error(`${item.item.Name} removed`);
+          return item.quantity > 0;
+        }),
     );
   };
 
@@ -54,6 +58,7 @@ const Home: Component = () => {
             amount: '',
           };
           setBasketItems((items) => [...items, newBasketItem]);
+          toast.success(`1 ${newBasketItem.item.Name} added!`);
         }
       } else {
         setBasketItems(
@@ -64,6 +69,8 @@ const Home: Component = () => {
             return item;
           }),
         );
+
+        toast.success(`Another ${itemExist.item.Name} added!`);
       }
     }
   };
@@ -98,23 +105,36 @@ const Home: Component = () => {
 
           <BasketDropArea id={1}></BasketDropArea>
 
-          <div class='mt-4 p-2 rounded-lg border shadow-sm'>
+          <div class='mt-4 p-2 rounded-lg border shadow'>
             <Show when={!basketItems().length}>
               <div class='text-xs text-gray-500'>No items added.</div>
             </Show>
 
-            <ul class='grid grid-cols-1'>
-              <For each={basketItems()}>
-                {(basketItem) => (
-                  <li>
-                    <BasketItemCard
-                      increaseQty={increaseQty}
-                      decreaseQty={decreaseQty}
-                      item={basketItem}></BasketItemCard>
-                  </li>
-                )}
-              </For>
-            </ul>
+            <Show when={basketItems().length}>
+              <div class='border-b pb-4 text-gray-500'>
+                <label class='text-sm'>Give this list a name</label>
+                <input type='text' class='w-full p-2 border rounded' />
+              </div>
+
+              <ul class='grid grid-cols-1'>
+                <For each={basketItems()}>
+                  {(basketItem) => (
+                    <li>
+                      <BasketItemCard
+                        increaseQty={increaseQty}
+                        decreaseQty={decreaseQty}
+                        item={basketItem}></BasketItemCard>
+                    </li>
+                  )}
+                </For>
+              </ul>
+
+              <div class='mt-3 text-right'>
+                <button class='px-2 py-1 border rounded-lg bg-blue-500 hover:bg-blue-600 text-white'>
+                  Save
+                </button>
+              </div>
+            </Show>
           </div>
         </section>
       </section>
