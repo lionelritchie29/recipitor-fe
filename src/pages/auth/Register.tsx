@@ -37,7 +37,7 @@ const RegisterPage: Component = () => {
         <div class='flex justify-between mt-4'>
           <div>
             Already have an account?{' '}
-            <A class='hover:text-blue-600' href='/auth/login'>
+            <A class='text-blue-600 hover:text-blue-700' href='/auth/login'>
               Login
             </A>
           </div>

@@ -10,7 +10,7 @@ const Navbar: Component = () => {
         </div>
         <ul class='flex space-x-4'>
           <li class='text-gray-600 font-semibold hover:text-black'>
-            <A href='/auth/register'>Register</A>
+            <A href='/auth/login'>Sign in</A>
           </li>
         </ul>
       </div>

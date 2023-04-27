@@ -28,7 +28,7 @@ const LoginPage: Component = () => {
         <div class='flex justify-between mt-4'>
           <div>
             Dont have an account yet?{' '}
-            <A class='hover:text-blue-600' href='/auth/register'>
+            <A class='text-blue-600 hover:text-blue-700' href='/auth/register'>
               Register
             </A>
           </div>
