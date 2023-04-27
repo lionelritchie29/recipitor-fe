@@ -8,7 +8,11 @@ const Navbar: Component = () => {
         <div class='font-semibold'>
           <A href='/'>Recipitor</A>
         </div>
-        <ul class='flex space-x-4'></ul>
+        <ul class='flex space-x-4'>
+          <li class='text-gray-600 font-semibold hover:text-black'>
+            <A href='/auth/register'>Register</A>
+          </li>
+        </ul>
       </div>
     </nav>
   );
