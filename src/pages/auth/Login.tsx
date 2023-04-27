@@ -34,7 +34,7 @@ const LoginPage: Component = () => {
           </div>
 
           <button class='bg-blue-600 hover:bg-blue-700 text-white border p-2 rounded-md'>
-            Register
+            Login
           </button>
         </div>
       </form>
