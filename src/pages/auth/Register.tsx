@@ -28,10 +28,8 @@ const RegisterPage: Component = () => {
         loading: 'Registering...',
         error: (e) => toast.error(e.message),
         success: () => {
-          setTimeout(() => {
-            navigate('/', { replace: true });
-          }, 3000);
-          return 'Registered! you will be redirected in 3 seconds.';
+          navigate('/auth/login');
+          return 'Registered! You may now proceed to login.';
         },
       });
     }

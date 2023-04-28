@@ -3,12 +3,14 @@ import { Component, createSignal } from 'solid-js';
 import toast from 'solid-toast';
 import { AuthService } from '../../services/AuthService';
 import { LoginDto } from '../../models/dto/LoginDto';
+import { useAuth } from '../../providers/AuthProvider';
 
 const LoginPage: Component = () => {
   const [email, setEmail] = createSignal('');
   const [password, setPassword] = createSignal('');
   const authService = new AuthService();
   const navigate = useNavigate();
+  const auth = useAuth()!!;
 
   const onSubmit = async (e: Event) => {
     e.preventDefault();
@@ -23,11 +25,10 @@ const LoginPage: Component = () => {
       await toast.promise(authService.login(dto), {
         loading: 'Logging in...',
         error: (e) => e.message,
-        success: () => {
-          setTimeout(() => {
-            navigate('/');
-          }, 3000);
-          return 'Logged in! you will be redirected in 3 seconds.';
+        success: (token) => {
+          auth.login(token);
+          navigate('/');
+          return 'Logged in!';
         },
       });
     }
