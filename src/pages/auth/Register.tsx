@@ -1,10 +1,45 @@
-import { A } from '@solidjs/router';
-import { Component } from 'solid-js';
+import { A, useNavigate } from '@solidjs/router';
+import { Component, createSignal } from 'solid-js';
+import toast from 'solid-toast';
+import { AuthService } from '../../services/AuthService';
+import { LoginDto } from '../../models/dto/LoginDto';
 
 const RegisterPage: Component = () => {
+  const [email, setEmail] = createSignal('');
+  const [password, setPassword] = createSignal('');
+  const [confirmPassword, setConfirmPassword] = createSignal('');
+  const navigate = useNavigate();
+  const authService = new AuthService();
+
+  const onRegister = async (e: Event) => {
+    e.preventDefault();
+    if (!email() || !password() || !confirmPassword()) {
+      toast.error('All fields must be filled!');
+    } else if (password() !== confirmPassword()) {
+      toast.error('Password and its confirmation must match with each other!');
+    } else if (password().length < 6) {
+      toast.error('Password must consists at least 6 characters!');
+    } else {
+      const dto: LoginDto = {
+        email: email(),
+        password: password(),
+      };
+      await toast.promise(authService.register(dto), {
+        loading: 'Registering...',
+        error: (e) => toast.error(e.message),
+        success: () => {
+          setTimeout(() => {
+            navigate('/', { replace: true });
+          }, 3000);
+          return 'Registered! you will be redirected in 3 seconds.';
+        },
+      });
+    }
+  };
+
   return (
     <div class='flex items-center justify-center'>
-      <form class='w-2/5 border rounded p-8'>
+      <form onsubmit={onRegister} class='w-2/5 border rounded p-8'>
         <h1 class='font-semibold text-lg'>Register</h1>
 
         <div class='flex items-center mt-2'>
@@ -12,6 +47,7 @@ const RegisterPage: Component = () => {
           <input
             class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='email'
+            onChange={(e) => setEmail(e.currentTarget.value)}
             placeholder='example@mail.com'
           />
         </div>
@@ -21,6 +57,7 @@ const RegisterPage: Component = () => {
           <input
             class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='password'
+            onChange={(e) => setPassword(e.currentTarget.value)}
             placeholder='**********'
           />
         </div>
@@ -30,6 +67,7 @@ const RegisterPage: Component = () => {
           <input
             class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='password'
+            onChange={(e) => setConfirmPassword(e.currentTarget.value)}
             placeholder='**********'
           />
         </div>
@@ -42,7 +80,9 @@ const RegisterPage: Component = () => {
             </A>
           </div>
 
-          <button class='bg-blue-600 hover:bg-blue-700 text-white border p-2 rounded-md'>
+          <button
+            type='submit'
+            class='bg-blue-600 hover:bg-blue-700 text-white border p-2 rounded-md'>
             Register
           </button>
         </div>
