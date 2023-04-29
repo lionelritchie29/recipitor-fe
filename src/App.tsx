@@ -4,6 +4,7 @@ import { Routes, Route } from '@solidjs/router';
 import Home from './pages/Home';
 import RegisterPage from './pages/auth/Register';
 import LoginPage from './pages/auth/Login';
+import MyListPage from './pages/MyList';
 
 const App: Component<{ children: JSXElement }> = ({ children }) => {
   return (
@@ -14,6 +15,7 @@ const App: Component<{ children: JSXElement }> = ({ children }) => {
       <div class='max-w-screen-xl mx-auto p-4'>
         <Routes>
           <Route path='/' component={Home} />
+          <Route path='/lists' component={MyListPage} />
 
           <Route path='/auth'>
             <Route path='/register' component={RegisterPage} />

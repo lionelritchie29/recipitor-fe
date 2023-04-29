@@ -15,6 +15,9 @@ const Navbar: Component = () => {
           <Show when={auth.user()}>
             <li class='text-black'>{auth.user()?.email}</li>
             <li class='text-gray-600 font-semibold hover:text-black'>
+              <A href='/lists'>My List</A>
+            </li>
+            <li class='text-gray-600 font-semibold hover:text-black'>
               <button onclick={() => auth.logout()}>Log out</button>
             </li>
           </Show>
