@@ -2,12 +2,17 @@ import { Accessor, Component, For, Setter, Show, createSignal } from 'solid-js';
 import { BasketItem } from '../models/BasketItem';
 import BasketItemCard from './BasketItemCard';
 import toast from 'solid-toast';
+import { CreateListDto } from '../models/dto/CreateListDto';
+import { ListService } from '../services/ListService';
+import { useAuth } from '../providers/AuthProvider';
 
 const Basket: Component<{
   basketItems: Accessor<BasketItem[]>;
   setBasketItems: Setter<BasketItem[]>;
 }> = ({ basketItems, setBasketItems }) => {
   const [listName, setListName] = createSignal('');
+  const listService = new ListService();
+  const auth = useAuth()!!;
 
   const increaseQty = (id: number) => {
     setBasketItems(
@@ -36,12 +41,34 @@ const Basket: Component<{
     );
   };
 
-  const onSubmit = (e: Event) => {
+  const onSubmit = async (e: Event) => {
     e.preventDefault();
+    if (!auth.user()) {
+      toast.error('You are not logged in, please log in first.');
+      return;
+    }
+
     if (!listName()) {
-      alert('You must provide a name for this list.');
+      toast.error('Please provide a name for this list.');
     } else {
-      console.log({ listName, items: basketItems() });
+      const dto: CreateListDto = {
+        name: listName(),
+        items: basketItems().map((item) => ({
+          id: item.item.ID,
+          amount: item.amount,
+          quantity: item.quantity,
+        })),
+      };
+
+      await toast.promise(listService.CreateList(auth.user()!!.id, dto), {
+        loading: 'Creating list...',
+        error: (e) => e.message,
+        success: (_) => {
+          setBasketItems([]);
+          setListName('');
+          return 'List created!';
+        },
+      });
     }
   };
 
