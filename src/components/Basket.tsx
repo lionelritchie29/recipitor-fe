@@ -60,7 +60,7 @@ const Basket: Component<{
         })),
       };
 
-      await toast.promise(listService.CreateList(auth.user()!!.id, dto), {
+      await toast.promise(listService.create(auth.user()!!.id, dto), {
         loading: 'Creating list...',
         error: (e) => e.message,
         success: (_) => {

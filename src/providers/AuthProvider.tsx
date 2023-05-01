@@ -15,10 +15,12 @@ const AuthContext = createContext<{
   user: Accessor<AuthUser | null>;
   login: (token: string) => void;
   logout: () => void;
+  token: Accessor<string>;
 }>();
 
 export const AuthProvider: Component<{ children: JSXElement }> = (props) => {
   const [user, setUser] = createSignal<AuthUser | null>(null);
+  const [token, setToken] = createSignal<string>('');
 
   onMount(() => {
     const token = Cookies.get('user');
@@ -30,6 +32,7 @@ export const AuthProvider: Component<{ children: JSXElement }> = (props) => {
         id: decoded.sub,
       };
       setUser(logged);
+      setToken(token);
     }
   });
 
@@ -49,7 +52,9 @@ export const AuthProvider: Component<{ children: JSXElement }> = (props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>{props.children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, logout, token }}>
+      {props.children}
+    </AuthContext.Provider>
   );
 };
 
