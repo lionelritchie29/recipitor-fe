@@ -1,6 +1,7 @@
 import { Component, For, createEffect, createResource, createSignal } from 'solid-js';
 import { useAuth } from '../providers/AuthProvider';
 import { ListService } from '../services/ListService';
+import ListItem from '../components/ListItem';
 
 const MyListPage: Component = () => {
   const auth = useAuth();
@@ -16,8 +17,14 @@ const MyListPage: Component = () => {
 
   return (
     <div>
-      <ul>
-        <For each={lists()}>{(list) => <li>{list.Name}</li>}</For>
+      <ul class='grid grid-cols-4 gap-4' style={{ 'grid-auto-rows': '1fr' }}>
+        <For each={lists() ?? []}>
+          {(list) => (
+            <li>
+              <ListItem list={list} />
+            </li>
+          )}
+        </For>
       </ul>
     </div>
   );
