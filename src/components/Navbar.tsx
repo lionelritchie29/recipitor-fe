@@ -11,9 +11,16 @@ const Navbar: Component = () => {
         <div class='font-semibold'>
           <A href='/'>Recipitor</A>
         </div>
-        <ul class='flex space-x-4'>
+        <ul class='flex space-x-4 items-center'>
           <Show when={auth.user()}>
-            <li class='text-black'>{auth.user()?.email}</li>
+            <li class='bg-blue-500 px-2 text-gray-50 rounded-full text-black text-sm'>
+              {auth.user()?.email}
+            </li>
+          </Show>
+          <li class='text-gray-600 font-semibold hover:text-black'>
+            <A href='/'>Home</A>
+          </li>
+          <Show when={auth.user()}>
             <li class='text-gray-600 font-semibold hover:text-black'>
               <A href='/lists'>My List</A>
             </li>

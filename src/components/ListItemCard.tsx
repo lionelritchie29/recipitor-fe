@@ -8,8 +8,11 @@ const ListItemCard: Component<{ item: ListItem; isLast: boolean }> = ({ item, is
         <img src={item.Image} class='rounded border' alt={item.Name} />
       </div>
 
-      <div class='flex space-x-2 text-sm text-gray-500'>
-        {item.Quantity || 'Unknown Quantity'} x {item.Amount || 'Unknown Amount'}
+      <div class='text-sm text-gray-500'>
+        <div class='font-semibold'>{item.Name}</div>
+        <div>
+          {item.Quantity || 'Unknown Quantity'} ({item.Amount || 'Unknown Amount'})
+        </div>
       </div>
     </div>
   );

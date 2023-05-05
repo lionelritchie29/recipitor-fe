@@ -16,17 +16,20 @@ const MyListPage: Component = () => {
   });
 
   return (
-    <div>
-      <ul class='grid grid-cols-4 gap-4' style={{ 'grid-auto-rows': '1fr' }}>
-        <For each={lists() ?? []}>
-          {(list) => (
-            <li>
-              <ListItem list={list} />
-            </li>
-          )}
-        </For>
-      </ul>
-    </div>
+    <section>
+      <h2 class='text-lg font-bold'>My List</h2>
+      <div>
+        <ul class='grid grid-cols-4 gap-4' style={{ 'grid-auto-rows': '1fr' }}>
+          <For each={lists() ?? []}>
+            {(list) => (
+              <li>
+                <ListItem list={list} />
+              </li>
+            )}
+          </For>
+        </ul>
+      </div>
+    </section>
   );
 };
 
