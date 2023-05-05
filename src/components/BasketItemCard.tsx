@@ -1,13 +1,12 @@
 import { Component } from 'solid-js';
 import { BasketItem } from '../models/BasketItem';
+import { useBasket } from '../providers/BasketProvider';
 
 const BasketItemCard: Component<{
   item: BasketItem;
-  increaseQty: (id: number) => void;
-  decreaseQty: (id: number) => void;
-  setAmount: (id: number, amount: string) => void;
-  changeQty: (id: number, qty: number) => void;
-}> = ({ item, increaseQty, decreaseQty, setAmount, changeQty }) => {
+}> = ({ item }) => {
+  const basket = useBasket()!!;
+
   return (
     <div class='flex space-x-3 items-center border-b px-2 py-4'>
       <div class='w-1/4'>
@@ -20,19 +19,19 @@ const BasketItemCard: Component<{
 
           <div class='flex'>
             <button
-              onclick={() => decreaseQty(item.item.ID)}
+              onclick={() => basket.decreaseQty(item.item.ID)}
               class='bg-red-600 hover:bg-red-700 rounded font-bold text-white py-2 px-3 border'>
               -
             </button>
             <input
-              onchange={(e) => changeQty(item.item.ID, parseInt(e.currentTarget.value))}
+              onchange={(e) => basket.setQty(item.item.ID, parseInt(e.currentTarget.value))}
               value={item.quantity}
               class='border p-2 rounded w-full'
               type='number'
               placeholder='Quantity'
             />
             <button
-              onclick={() => increaseQty(item.item.ID)}
+              onclick={() => basket.increaseQty(item.item.ID)}
               class='bg-green-600 hover:bg-green-700 rounded font-bold text-white py-2 px-3 border'>
               +
             </button>
@@ -41,7 +40,7 @@ const BasketItemCard: Component<{
         <div>
           <label>Amount</label>
           <input
-            onchange={(e) => setAmount(item.item.ID, e.currentTarget.value)}
+            onchange={(e) => basket.setAmount(item.item.ID, e.currentTarget.value)}
             value={item.amount}
             required
             class='border p-2 rounded w-full outline-none'

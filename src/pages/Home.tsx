@@ -1,18 +1,17 @@
-import { Component, For, Show, createResource, createSignal } from 'solid-js';
+import { Component, Show, createResource, createSignal } from 'solid-js';
 import ItemCard from '../components/ItemCard';
-import Draggable from '../components/Draggable';
 import { DragDropProvider, DragDropSensors, DragEvent, DragOverlay } from '@thisbeyond/solid-dnd';
 import BasketDropArea from '../components/BasketDropArea';
-import BasketItemCard from '../components/BasketItemCard';
 import { BasketItem } from '../models/BasketItem';
 import { ItemService } from '../services/ItemService';
 import toast from 'solid-toast';
 import Basket from '../components/Basket';
 import ItemList from '../components/ItemList';
+import { useBasket } from '../providers/BasketProvider';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
-  const [basketItems, setBasketItems] = createSignal<BasketItem[]>([]);
+  const basket = useBasket()!!;
   const itemService = new ItemService();
   const [items] = createResource(itemService.getItems);
 
@@ -22,7 +21,7 @@ const Home: Component = () => {
 
   const onDragEnd = ({ draggable, droppable }: DragEvent) => {
     if (draggable && droppable) {
-      const itemExist = basketItems().find((basket) => basket.item.ID == draggable.id);
+      const itemExist = basket.items().find((basket) => basket.item.ID == draggable.id);
       if (!itemExist) {
         const item = (items() ?? []).find((i) => i.ID === draggable.id);
 
@@ -32,19 +31,11 @@ const Home: Component = () => {
             quantity: 1,
             amount: '',
           };
-          setBasketItems((items) => [...items, newBasketItem]);
+          basket.addItem(newBasketItem);
           toast.success(`1 ${newBasketItem.item.Name} added!`);
         }
       } else {
-        setBasketItems(
-          basketItems().map((item) => {
-            if (item.item.ID == itemExist.item.ID) {
-              return { ...item, quantity: item.quantity + 1 };
-            }
-            return item;
-          }),
-        );
-
+        basket.increaseQty(itemExist.item.ID);
         toast.success(`Another ${itemExist.item.Name} added!`);
       }
     }
@@ -70,7 +61,7 @@ const Home: Component = () => {
 
           <BasketDropArea id={1}></BasketDropArea>
 
-          <Basket basketItems={basketItems} setBasketItems={setBasketItems} />
+          <Basket />
         </section>
       </section>
 

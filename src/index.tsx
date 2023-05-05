@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import { Toaster } from 'solid-toast';
 import { AuthProvider } from './providers/AuthProvider';
+import { BasketProvider } from './providers/BasketProvider';
 
 const root = document.getElementById('root');
 
@@ -19,9 +20,11 @@ render(
   () => (
     <Router>
       <AuthProvider>
-        <App>
-          <Toaster />
-        </App>
+        <BasketProvider>
+          <App>
+            <Toaster />
+          </App>
+        </BasketProvider>
       </AuthProvider>
     </Router>
   ),

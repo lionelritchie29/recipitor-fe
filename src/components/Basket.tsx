@@ -1,50 +1,16 @@
-import { Accessor, Component, For, Setter, Show, createSignal } from 'solid-js';
-import { BasketItem } from '../models/BasketItem';
+import { Component, For, Show, createSignal } from 'solid-js';
 import BasketItemCard from './BasketItemCard';
 import toast from 'solid-toast';
 import { CreateListDto } from '../models/dto/CreateListDto';
 import { ListService } from '../services/ListService';
 import { useAuth } from '../providers/AuthProvider';
+import { useBasket } from '../providers/BasketProvider';
 
-const Basket: Component<{
-  basketItems: Accessor<BasketItem[]>;
-  setBasketItems: Setter<BasketItem[]>;
-}> = ({ basketItems, setBasketItems }) => {
+const Basket: Component = () => {
   const [listName, setListName] = createSignal('');
   const listService = new ListService();
   const auth = useAuth()!!;
-
-  const changeQty = (id: number, qty: number) => {
-    if (qty < 0) qty = 0;
-    setBasketItems((items) =>
-      items.map((item) => (item.item.ID == id ? { ...item, quantity: qty } : item)),
-    );
-  };
-
-  const setAmount = (id: number, amount: string) => {
-    setBasketItems((items) =>
-      items.map((item) => (item.item.ID == id ? { ...item, amount } : item)),
-    );
-  };
-
-  const increaseQty = (id: number) => {
-    setBasketItems((items) =>
-      items.map((item) => (item.item.ID == id ? { ...item, quantity: item.quantity + 1 } : item)),
-    );
-  };
-
-  const decreaseQty = (id: number) => {
-    setBasketItems((items) =>
-      items
-        .map((item) =>
-          item.item.ID == id ? { ...item, quantity: Math.max(item.quantity - 1, 0) } : item,
-        )
-        .filter((item) => {
-          if (item.quantity == 0) toast.error(`${item.item.Name} removed`);
-          return item.quantity > 0;
-        }),
-    );
-  };
+  const basket = useBasket()!!;
 
   const onSubmit = async (e: Event) => {
     e.preventDefault();
@@ -58,7 +24,7 @@ const Basket: Component<{
     } else {
       const dto: CreateListDto = {
         name: listName(),
-        items: basketItems().map((item) => ({
+        items: basket.items().map((item) => ({
           id: item.item.ID,
           amount: item.amount,
           quantity: item.quantity,
@@ -69,7 +35,7 @@ const Basket: Component<{
         loading: 'Creating list...',
         error: (e) => e.message,
         success: (_) => {
-          setBasketItems([]);
+          basket.emptyBasket();
           setListName('');
           return 'List created!';
         },
@@ -79,11 +45,11 @@ const Basket: Component<{
 
   return (
     <form onsubmit={onSubmit} class='mt-4 p-4 rounded-lg border shadow'>
-      <Show when={!basketItems().length}>
+      <Show when={!basket.items().length}>
         <div class='text-xs text-gray-500 p-2'>No items added.</div>
       </Show>
 
-      <Show when={basketItems().length}>
+      <Show when={basket.items().length}>
         <div class='text-sm border-b pb-4 text-gray-500'>
           <label>Give this list a name</label>
           <input
@@ -95,15 +61,10 @@ const Basket: Component<{
         </div>
 
         <ul class='grid grid-cols-1'>
-          <For each={basketItems()}>
+          <For each={basket.items()}>
             {(basketItem) => (
               <li>
-                <BasketItemCard
-                  changeQty={changeQty}
-                  setAmount={setAmount}
-                  increaseQty={increaseQty}
-                  decreaseQty={decreaseQty}
-                  item={basketItem}></BasketItemCard>
+                <BasketItemCard item={basketItem}></BasketItemCard>
               </li>
             )}
           </For>
