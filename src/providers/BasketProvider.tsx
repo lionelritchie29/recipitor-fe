@@ -1,5 +1,14 @@
-import { Accessor, Component, JSXElement, createContext, createSignal, useContext } from 'solid-js';
+import {
+  Accessor,
+  Component,
+  JSXElement,
+  createContext,
+  createSignal,
+  onMount,
+  useContext,
+} from 'solid-js';
 import { BasketItem } from '../models/BasketItem';
+import Cookies from 'js-cookie';
 
 const BasketContext = createContext<{
   items: Accessor<BasketItem[]>;
@@ -14,25 +23,43 @@ const BasketContext = createContext<{
 export const BasketProvider: Component<{ children: JSXElement }> = (props) => {
   const [items, setItems] = createSignal<BasketItem[]>([]);
 
-  const emptyBasket = () => setItems([]);
+  onMount(() => {
+    const rawData = Cookies.get('basket');
 
-  const addItem = (item: BasketItem) => setItems((items) => [...items, item]);
+    if (rawData) {
+      const data = JSON.parse(rawData) as BasketItem[];
+      setItems(data);
+    }
+  });
+
+  const emptyBasket = () => {
+    setItems([]);
+    updateCookie();
+  };
+
+  const addItem = (item: BasketItem) => {
+    setItems((items) => [...items, item]);
+    updateCookie();
+  };
 
   const setQty = (id: number, qty: number) => {
     if (qty < 0) qty = 0;
     setItems((items) =>
       items.map((item) => (item.item.ID == id ? { ...item, quantity: qty } : item)),
     );
+    updateCookie();
   };
 
   const setAmount = (id: number, amount: string) => {
     setItems((items) => items.map((item) => (item.item.ID == id ? { ...item, amount } : item)));
+    updateCookie();
   };
 
   const increaseQty = (id: number) => {
     setItems((items) =>
       items.map((item) => (item.item.ID == id ? { ...item, quantity: item.quantity + 1 } : item)),
     );
+    updateCookie();
   };
 
   const decreaseQty = (id: number) => {
@@ -43,6 +70,12 @@ export const BasketProvider: Component<{ children: JSXElement }> = (props) => {
         )
         .filter((item) => item.quantity > 0),
     );
+    updateCookie();
+  };
+
+  const updateCookie = () => {
+    const data = JSON.stringify(items());
+    Cookies.set('basket', data, { expires: 7 });
   };
 
   return (
