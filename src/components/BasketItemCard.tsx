@@ -5,7 +5,9 @@ const BasketItemCard: Component<{
   item: BasketItem;
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
-}> = ({ item, increaseQty, decreaseQty }) => {
+  setAmount: (id: number, amount: string) => void;
+  changeQty: (id: number, qty: number) => void;
+}> = ({ item, increaseQty, decreaseQty, setAmount, changeQty }) => {
   return (
     <div class='flex space-x-3 items-center border-b px-2 py-4'>
       <div class='w-1/4'>
@@ -13,7 +15,7 @@ const BasketItemCard: Component<{
       </div>
 
       <div class='flex space-x-2 text-sm text-gray-500'>
-        <div class='w-2/5'>
+        <div class='w-3/5'>
           <label>Qty</label>
 
           <div class='flex'>
@@ -23,7 +25,7 @@ const BasketItemCard: Component<{
               -
             </button>
             <input
-              disabled
+              onchange={(e) => changeQty(item.item.ID, parseInt(e.currentTarget.value))}
               value={item.quantity}
               class='border p-2 rounded w-full'
               type='number'
@@ -36,10 +38,13 @@ const BasketItemCard: Component<{
             </button>
           </div>
         </div>
-        <div class='w-2/3'>
+        <div>
           <label>Amount</label>
           <input
-            class='border p-2 rounded w-full'
+            onchange={(e) => setAmount(item.item.ID, e.currentTarget.value)}
+            value={item.amount}
+            required
+            class='border p-2 rounded w-full outline-none'
             type='text'
             placeholder='Amount (kg, gram, etc)'
           />

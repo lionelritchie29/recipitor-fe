@@ -14,26 +14,31 @@ const Basket: Component<{
   const listService = new ListService();
   const auth = useAuth()!!;
 
+  const changeQty = (id: number, qty: number) => {
+    if (qty < 0) qty = 0;
+    setBasketItems((items) =>
+      items.map((item) => (item.item.ID == id ? { ...item, quantity: qty } : item)),
+    );
+  };
+
+  const setAmount = (id: number, amount: string) => {
+    setBasketItems((items) =>
+      items.map((item) => (item.item.ID == id ? { ...item, amount } : item)),
+    );
+  };
+
   const increaseQty = (id: number) => {
-    setBasketItems(
-      basketItems().map((item) => {
-        if (item.item.ID == id) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      }),
+    setBasketItems((items) =>
+      items.map((item) => (item.item.ID == id ? { ...item, quantity: item.quantity + 1 } : item)),
     );
   };
 
   const decreaseQty = (id: number) => {
-    setBasketItems(
-      basketItems()
-        .map((item) => {
-          if (item.item.ID == id) {
-            return { ...item, quantity: Math.max(item.quantity - 1, 0) };
-          }
-          return item;
-        })
+    setBasketItems((items) =>
+      items
+        .map((item) =>
+          item.item.ID == id ? { ...item, quantity: Math.max(item.quantity - 1, 0) } : item,
+        )
         .filter((item) => {
           if (item.quantity == 0) toast.error(`${item.item.Name} removed`);
           return item.quantity > 0;
@@ -73,7 +78,7 @@ const Basket: Component<{
   };
 
   return (
-    <form onsubmit={onSubmit} class='mt-4 p-2 rounded-lg border shadow'>
+    <form onsubmit={onSubmit} class='mt-4 p-4 rounded-lg border shadow'>
       <Show when={!basketItems().length}>
         <div class='text-xs text-gray-500 p-2'>No items added.</div>
       </Show>
@@ -94,6 +99,8 @@ const Basket: Component<{
             {(basketItem) => (
               <li>
                 <BasketItemCard
+                  changeQty={changeQty}
+                  setAmount={setAmount}
                   increaseQty={increaseQty}
                   decreaseQty={decreaseQty}
                   item={basketItem}></BasketItemCard>
