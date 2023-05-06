@@ -14,7 +14,7 @@ const ItemCard: Component<{ item: Item; height?: string }> = ({ item, height = '
           height: height,
         }}></div>
 
-      <div class='ml-3'>{item.Name}</div>
+      <div class='ml-3 text-sm'>{item.Name}</div>
     </div>
   );
 };
