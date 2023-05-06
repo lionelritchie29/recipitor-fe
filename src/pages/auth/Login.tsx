@@ -36,13 +36,13 @@ const LoginPage: Component = () => {
 
   return (
     <div class='flex items-center justify-center'>
-      <form onsubmit={onSubmit} class='w-2/5 border rounded p-8'>
+      <form onsubmit={onSubmit} class='md:w-2/5 border rounded p-8'>
         <h1 class='font-semibold text-lg'>Login</h1>
 
         <div class='flex items-center mt-2'>
-          <label class='w-1/5 rounded-l-md border p-2 font-semibold'>Email</label>
+          <label class='w-2/5 md:w-1/5 rounded-l-md border p-2 font-semibold'>Email</label>
           <input
-            class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
+            class='w-3/5 md:w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='email'
             placeholder='example@mail.com'
             onChange={(e) => setEmail(e.currentTarget.value)}
@@ -50,9 +50,9 @@ const LoginPage: Component = () => {
         </div>
 
         <div class='flex items-center mt-4'>
-          <label class='w-1/5 border rounded-l-md p-2 font-semibold'>Password</label>
+          <label class='w-2/5 md:w-1/5 border rounded-l-md p-2 font-semibold'>Password</label>
           <input
-            class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
+            class='w-3/5 md:w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='password'
             placeholder='**********'
             onChange={(e) => setPassword(e.currentTarget.value)}

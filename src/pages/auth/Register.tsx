@@ -37,13 +37,13 @@ const RegisterPage: Component = () => {
 
   return (
     <div class='flex items-center justify-center'>
-      <form onsubmit={onRegister} class='w-2/5 border rounded p-8'>
+      <form onsubmit={onRegister} class='md:w-2/5 border rounded p-8'>
         <h1 class='font-semibold text-lg'>Register</h1>
 
         <div class='flex items-center mt-2'>
-          <label class='w-1/5 border rounded-l-md p-2'>Email</label>
+          <label class='w-2/5 md:w-1/5 border rounded-l-md p-2'>Email</label>
           <input
-            class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
+            class='w-3/5 md:w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='email'
             onChange={(e) => setEmail(e.currentTarget.value)}
             placeholder='example@mail.com'
@@ -51,9 +51,9 @@ const RegisterPage: Component = () => {
         </div>
 
         <div class='flex items-center mt-4'>
-          <label class='w-1/5 border rounded-l-md p-2'>Password</label>
+          <label class='w-2/5 md:w-1/5 border rounded-l-md p-2'>Password</label>
           <input
-            class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
+            class='w-3/5 md:w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='password'
             onChange={(e) => setPassword(e.currentTarget.value)}
             placeholder='**********'
@@ -61,9 +61,9 @@ const RegisterPage: Component = () => {
         </div>
 
         <div class='flex items-center mt-4'>
-          <label class='w-1/5 border rounded-l-md p-2'>Confirm</label>
+          <label class='w-2/5 md:w-1/5 border rounded-l-md p-2'>Confirm</label>
           <input
-            class='w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
+            class='w-3/5 md:w-4/5 outline-none rounded-r-md border-t border-b border-r p-2'
             type='password'
             onChange={(e) => setConfirmPassword(e.currentTarget.value)}
             placeholder='**********'

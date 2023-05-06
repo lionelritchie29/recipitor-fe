@@ -44,8 +44,8 @@ const Home: Component = () => {
   return (
     <DragDropProvider onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <DragDropSensors />
-      <section class='flex'>
-        <section class='w-2/3 border-r'>
+      <section class='flex flex-col md:flex-row'>
+        <section class='md:w-2/3 border-r'>
           <div class='mb-4'>
             <h2 class='font-semibold'>Available Items</h2>
             <p class='text-gray-500'>You can move these items to the basket beside.</p>
@@ -53,7 +53,8 @@ const Home: Component = () => {
 
           <ItemList items={items} />
         </section>
-        <section class='w-1/3 ml-4'>
+
+        <section class='md:w-1/3 md:ml-4 border-t mt-2 pt-4'>
           <div class='mb-4'>
             <h2 class='font-semibold'>Basket</h2>
             <p class='text-gray-500'>Select an item from the left and drag it here.</p>

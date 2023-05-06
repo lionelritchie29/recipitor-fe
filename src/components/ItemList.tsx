@@ -5,7 +5,7 @@ import ItemCard from './ItemCard';
 
 const ItemList: Component<{ items: Resource<Item[]> }> = ({ items }) => {
   return (
-    <ul class='grid grid-cols-4 gap-4 mr-4'>
+    <ul class='grid grid-cols-2 max-h-64 md:max-h-full overflow-auto md:grid-cols-4 gap-4 mr-4'>
       <For each={items() ?? []}>
         {(item, i) => (
           <li>
