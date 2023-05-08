@@ -3,7 +3,7 @@ import { Item } from '../models/Item';
 
 const ItemCard: Component<{ item: Item; height?: string }> = ({ item, height = '50px' }) => {
   return (
-    <div class='flex border items-center rounded-lg cursor-pointer hover:shadow p-2'>
+    <div class='bg-white flex border items-center rounded-lg cursor-pointer hover:shadow p-2'>
       <div
         class='rounded-lg bg-white w-1/4'
         style={{

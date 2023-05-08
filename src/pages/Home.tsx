@@ -8,6 +8,7 @@ import toast from 'solid-toast';
 import Basket from '../components/Basket';
 import ItemList from '../components/ItemList';
 import { useBasket } from '../providers/BasketProvider';
+import SkeletonItemList from '../components/SkeletonItemList';
 
 const Home: Component = () => {
   const [activeDragItemId, setActiveDragItemId] = createSignal<null | number>(null);
@@ -51,7 +52,13 @@ const Home: Component = () => {
             <p class='text-gray-500'>You can move these items to the basket beside.</p>
           </div>
 
-          <ItemList items={items} />
+          <Show when={items.loading}>
+            <SkeletonItemList />
+          </Show>
+
+          <Show when={!items.loading}>
+            <ItemList items={items} />
+          </Show>
         </section>
 
         <section class='md:w-1/3 md:ml-4 border-t mt-2 pt-4'>
